@@ -1,5 +1,5 @@
 var turno = "x"
-var player1, player2, cas
+var player1 = "player 1", player2 = "player 2", cas
 var turnoxd = 0
 var wins = [0,0]
 var maindivxd
@@ -19,12 +19,13 @@ var posxd = [
 
 
 function input(bc){
-    //console.log(turno);
+    var audio = new Audio('sound/click.wav');
+    audio.play();
     if(turno == "x"){
-        
-        bc.style.backgroundImage = "url('img/x.png')";
+        document.getElementById(bc.value).textContent = "x";
+        //bc.style.backgroundImage = "url('img/x.png')";
         bc.disabled = "true";
-        cas[bc.value] = "x"
+        cas[bc.value] = "x";
         turnorestantes--
         checkwin();
         checktie()
@@ -32,8 +33,8 @@ function input(bc){
         turnoxd = 1
     }
     else if(turno == "o"){
-
-        bc.style.backgroundImage = "url('img/0.png')";
+        document.getElementById(bc.value).textContent = "o";
+        //bc.style.backgroundImage = "url('img/0.png')";
         bc.disabled = "true";
         cas[bc.value] = "o"
         turnorestantes--
@@ -53,9 +54,12 @@ function start(){
     document.querySelector("#tplayer1").innerHTML = "wins of " + player1+" : " + wins[0]
     document.querySelector("#tplayer2").innerHTML = "wins of " + player2+" : " + wins[1]
     for (let index = 0; index < botones.length; index++) {
-    botones[index].style.backgroundImage  = "url('img/white.png')"
     botones[index].disabled = false
-  }
+  } 
+    for(let i = 1; i < 10; i++){
+        document.getElementById(i).textContent = "";
+
+    }
 }
 
 
@@ -103,7 +107,7 @@ function getusername(){
    
 }
 
-
+start();
 
 
 
