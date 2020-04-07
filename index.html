@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Teo</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+    <div id="maindiv">
+        <h1>Tic Tac Toe</h1>
+            <div id="userinput">
+                <label>cual es el nombre del jugador uno?</label>
+                <input id="username1" type="text">
+                <br>
+                <label>cual es el nombre del jugador dos?</label>
+                <input id="username2" type="text">
+                <br>
+                <input type="submit" onclick="getusername()">
+            </div>
+        <br>
+        
+        <div id="tictactoe">
+            <div>
+                <span id="tplayer1">wins x:</span>
+                
+                <span id="tplayer2"> wins o:</span>
+                <br>
+                <br>
+                
+    
+            </div>
+            <div id="tablero">
+                
+                <table>
+                    <tr>
+                        <td><button type="button" onclick="input(this)" value="1" class="botones"></button></td>
+                        <td><button type="button" onclick="input(this)" value="2" class="botones"></button></td>
+                        <td><button type="button" onclick="input(this)" value="3" class="botones"></button></td>
+                    </tr>
+                    <tr>
+                        <td><button type="button" onclick="input(this)" value="4" class="botones"></button></td>
+                        <td><button type="button" onclick="input(this)" value="5" class="botones"></button></td>
+                        <td><button type="button" onclick="input(this)" value="6" class="botones"></button></td>
+                    </tr>
+                    <tr>
+                        <td><button type="button" onclick="input(this)" value="7" class="botones"></button></td>
+                        <td><button type="button" onclick="input(this)" value="8" class="botones"></button></td>
+                        <td><button type="button" onclick="input(this)" value="9" class="botones"></button></td>
+                    </tr>
+                </table>
+            </div>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <input type="button" style="padding: 20px;" value="reload" onclick="location.reload();">
+        </div>
+        </div>
+    
+<script src="script.js"></script>
+</body>
+
+</html>

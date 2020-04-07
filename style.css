@@ -1,0 +1,51 @@
+
+#maindiv{
+    height: 475px;
+    width: 475px;
+    
+}
+
+#tictactoe{
+ display:block;  
+
+
+}
+
+#userinput{
+    display: none;
+
+}
+
+h1{
+    font-size: 45px;
+    text-align: center;
+}
+#tplayer1{
+    font-size: 20px;
+
+}
+
+
+#tplayer2{
+    float: right;
+    font-size: 20px;
+}
+#tablero{
+    background: #0f12d6;
+    
+    height: 475px;
+    width: 475px;
+    border-left: none;
+    border-top: none;
+}
+
+.botones{
+    background-image: url(img/white.png);
+    height: 150px;
+    width: 150px;
+    cursor: pointer;
+    margin: 2px;   
+    background-repeat: no-repeat;
+    background-size: 140px;
+    background-position: center;
+}
