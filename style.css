@@ -4,6 +4,7 @@ html, body
     height: 100%;
 }
 
+
 body{
     height: 100%;
     width: 100%;
@@ -21,7 +22,6 @@ body{
 
 #tictactoe {
     display: block;
-
 }
 
 .reloadButton {
@@ -55,15 +55,20 @@ h1 {
     font-size: 20px;
 }
 
-#tablero {
+#game{
     background: linear-gradient(to right, #fc00ff, #00dbde);
     height: 477px;
     width: 477px;
-    border-radius: 2%;
+    border-radius: 2%;  
+    position: relative;
+    
+}
+
+.tablero{
+    position: absolute;
 }
 
 .botones {
-    background-color: white;
     height: 150px;
     width: 150px;
     cursor: pointer;
