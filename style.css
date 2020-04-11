@@ -68,7 +68,7 @@ h1 {
     position: absolute;
 }
 
-.botones {
+.button {
     height: 150px;
     width: 150px;
     cursor: pointer;
@@ -78,14 +78,14 @@ h1 {
     font-size: 150px;
 }
 
-.botones:disabled,
-.botones:disabled:hover {
+.button:disabled,
+.button:disabled:hover {
     background: white;
     color: rgb(76, 2, 136);
 
 }
 
-.botones:hover {
+.button:hover {
     background: linear-gradient(to top, #e7e5e5, #f3d5f8);
 
 }

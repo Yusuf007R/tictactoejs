@@ -1,15 +1,15 @@
-var turno = "x"
+var turn = "x"
 var player1 = "player 1",
     player2 = "player 2",
     win,
     tie;
-var turnoxd = 0;
-var whowin;
-var cas = new Array(10)
-var wins = [0, 0];
-var turnorestantes;
-
-var posxd = [
+var grid = new Array(10)
+var wins = {
+    x: 0,
+    o: 0
+}
+var remainingMovements;
+var winningCombos = [
     [1, 2, 3],
     [4, 5, 6],
     [7, 8, 9],
@@ -21,41 +21,42 @@ var posxd = [
 ];
 
 function start() {
-    let botones = document.querySelectorAll(".botones")
-    turno = "x";
-    turnoxd = 0;
-    for (let index = 0; index < cas.length; index++) {
-        cas[index] = ''
+    tie = false
+    win = false
+    let button = document.querySelectorAll(".button")
+    turn = "x";
+    for (let index = 0; index < grid.length; index++) {
+        grid[index] = ''
 
     }
-    tie = false;
-    whowin = '';
-    turnorestantes = 9;
-    document.querySelector("#tplayer1").innerHTML = "wins of " + player1 + " : " + wins[0]
-    document.querySelector("#tplayer2").innerHTML = "wins of " + player2 + " : " + wins[1]
-    for (let index = 0; index < botones.length; index++) {
-        botones[index].disabled = false
+    remainingMovements = 9;
+    document.querySelector("#tplayer1").innerHTML = "wins of " + player1 + " : " + wins.x
+    document.querySelector("#tplayer2").innerHTML = "wins of " + player2 + " : " + wins.o
+    for (let index = 0; index < button.length; index++) {
+        button[index].disabled = false
     }
     for (let i = 1; i < 10; i++) {
         document.getElementById(i).textContent = "";
     }
-    let xd = minimax(cas,'o')
-    move2(xd.id,turno)
+    let bestmove = minimax(grid, 'o')
+    setTimeout(() => {
+        move(bestmove.id, turn)
+   }, 200)
 }
 
 
 
-function playerinput(bc) {
-    const element = document.getElementById(bc.value)
-    if (turno == "x") {
-        move2(bc.value, turno);
-
-    } else if (turno == "o") {
-        move2(bc.value, turno);
-        let xd = minimax(cas, 'o')
-        console.log(xd)
-        setTimeout(()=>{move2(xd.id, turno)},400)
-        
+function playerinput(button) {
+    if (turn == "x") {
+        move(button.value, turn);
+    } else if (turn == "o") {
+        move(button.value, turn);
+        if (!win) {
+            let bestmove = minimax(grid, 'o')
+           setTimeout(() => {
+             move(bestmove.id, turn)
+           }, 400)
+        }
     }
 }
 
@@ -73,42 +74,55 @@ function animateCSS(element, animationName, callback) {
 }
 
 
-function tiex(board, pedro) {
+function tieChecker(board, callFromOutsideAI) {
+    let temptie = true
     for (let i = 1; i < board.length; i++) {
         if (board[i] == '') {
+            temptie = false
             return false
         }
+    }
+    if(temptie && callFromOutsideAI){
+        setTimeout(() => {
+            for (let index = 1; index < 10; index++) {
+                animateCSS(index, 'flash');
+            }
+            var audio = new Audio('sound/tie.wav');
+            audio.play();
+        }, 550)
+
+        setTimeout(() => {
+            start()
+        }, 2000)
+
     }
 }
 
 
-function endgame(board, player,pedro) {
-    const hola = pito => pito.every(holax => holax === turno);
-    for (let index = 0; index < posxd.length; index++) {
-        var pito2 = posxd[index];
-        win = hola([board[pito2[0]], board[pito2[1]], board[pito2[2]]]);
+
+function winChecker(board, player, callFromOutsideAI = false) {
+    const areSame = array => array.every(elements => elements === turn);
+    for (let index = 0; index < winningCombos.length; index++) {
+        var winPosition = winningCombos[index];
+        win = areSame([board[winPosition[0]], board[winPosition[1]], board[winPosition[2]]]);
         if (win) {
-            wins[turnoxd]++
-            let botones = document.querySelectorAll('.botones');
-            if(pedro){
+            let botones = document.querySelectorAll('.button');
+            if (callFromOutsideAI) {
+                wins[turn]++
                 for (let index = 0; index < botones.length; index++) {
                     botones[index].disabled = true;
                 }
                 setTimeout(function () {
                     for (let index2 = 0; index2 < 3; index2++) {
-                        console.log(pito2[index2])
-                        animateCSS(pito2[index2], 'flash');
-                        
+                        animateCSS(winPosition[index2], 'flash');
                     }
                     var audio = new Audio('sound/win.wav');
                     audio.play();
                 }, 550)
-               
                 setTimeout(() => {
                     start();
                 }, 2000)
                 break;
-    
             }
             if (player == 'x') {
                 return 'x'
@@ -120,41 +134,31 @@ function endgame(board, player,pedro) {
 }
 
 
-function move2(id, turn) {
-    document.getElementById(id).textContent = turn;
-    let bc = document.getElementById(id);
-    var audio = new Audio('sound/click.wav');
-    audio.play();
-    animateCSS(bc.value, 'pulse');
-    animateCSS(bc.value, 'faster');
-    if (turn == "x") {
-        bc.disabled = "true";
-        cas[bc.value] = "x";
-        turnorestantes--
-        let xdd = endgame(cas, 'x', true)
-        let hola = tiex(cas)
-        if (hola) {
-            console.log('empate')
-        }
-        if (xdd == 'x') {
-            console.log('x gano')
-        }
-        turno = "o";
-        turnoxd = 1;
+function move(buttonID, turnToCheck) {
+    let button = document.getElementById(buttonID);
+    animateCSS(button.value, 'pulse');
+    animateCSS(button.value, 'faster');
+    if (turnToCheck == "x") {
+        var audio = new Audio('sound/click.wav');
+        audio.play();
+        button.disabled = "true";
+        document.getElementById(buttonID).textContent = turnToCheck
+        grid[button.value] = turn;
+        let xdd = winChecker(grid, 'x', true)
+        let hola = tieChecker(grid, true)
+        //console.log(tie)
+        turn = "o";
+        remainingMovements--
     } else {
-        bc.disabled = "true";
-        cas[bc.value] = "o";
-        turnorestantes--
-        let xdd = endgame(cas, 'o')
-        let hola = tiex(cas)
-        if (hola) {
-            console.log('empate')
-        }
-        if (xdd == 'o') {
-            console.log('o gano')
-        }
-        turno = "x";
-        turnoxd = 0
+        var audio = new Audio('sound/click.wav');
+        audio.play();
+        button.disabled = "true";
+        document.getElementById(buttonID).textContent = turnToCheck
+        grid[button.value] = turn;
+        let xdd = winChecker(grid, 'o', true)
+        let hola = tieChecker(grid, true)
+        turn = "x";
+        remainingMovements--
     }
 
 
@@ -167,61 +171,60 @@ function emptyspot(board) {
         if (board[i] == '') {
             empty.push(i)
         }
+
     }
     return empty
 }
 
-function minimax(cas, player) {
-    let gamestage = endgame(cas, player)
-    let gametie = tiex(cas)
-    if (gamestage == 'o') {   
-        return {       
-            evaluation: 10
+function minimax(board, player) {
+    let gamestage = winChecker(board, player, false)
+    let gametie = tieChecker(board, false)
+    if (gamestage == 'o') {
+        return {
+            evaluation: -10
         }
     } else if (gamestage == 'x') {
         return {
-            evaluation: -10
+            evaluation: 10
         }
     } else if (gametie !== false) {
         return {
             evaluation: 0
         }
     }
-    let empty = emptyspot(cas)
+    let empty = emptyspot(board)
     let moves = []
-
-
     for (let i = 0; i < empty.length; i++) {
         let id = empty[i]
-        let saveboard = cas[id]
-        cas[id] = player
-        let move = {}
-        move.id = id
+        let saveboard = board[id]
+        board[id] = player
+        let possibleMove = {}
+        possibleMove.id = id
         if (player == "o") {
-            move.evaluation = minimax(cas, 'x').evaluation
+            possibleMove.evaluation = minimax(board, 'x').evaluation
         } else {
-            move.evaluation = minimax(cas, 'o').evaluation
+            possibleMove.evaluation = minimax(board, 'o').evaluation
         }
-        cas[id] = saveboard
-        moves.push(move)
+        board[id] = saveboard
+        moves.push(possibleMove)
     }
 
 
     let bestMove;
-    if(player == 'x'){
+    if (player == 'x') {
         // MAXIMIZER
         let bestEvaluation = -Infinity;
-        for(let i = 0; i < moves.length; i++){
-            if(moves[i].evaluation > bestEvaluation ){
+        for (let i = 0; i < moves.length; i++) {
+            if (moves[i].evaluation > bestEvaluation) {
                 bestEvaluation = moves[i].evaluation;
                 bestMove = moves[i];
             }
         }
-    }else{
+    } else {
         // MINIMIZER
-        let bestEvaluation = +Infinity;
-        for(let i = 0; i < moves.length; i++){
-            if( moves[i].evaluation < bestEvaluation ){
+        let bestEvaluation = Infinity;
+        for (let i = 0; i < moves.length; i++) {
+            if (moves[i].evaluation < bestEvaluation) {
                 bestEvaluation = moves[i].evaluation;
                 bestMove = moves[i];
             }
@@ -230,5 +233,4 @@ function minimax(cas, player) {
 
     return bestMove;
 }
-
 start();
