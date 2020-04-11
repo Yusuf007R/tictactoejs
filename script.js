@@ -41,7 +41,7 @@ function start() {
     let bestmove = minimax(grid, 'o')
     setTimeout(() => {
         move(bestmove.id, turn)
-   }, 200)
+    }, 200)
 }
 
 
@@ -53,9 +53,9 @@ function playerinput(button) {
         move(button.value, turn);
         if (!win) {
             let bestmove = minimax(grid, 'o')
-           setTimeout(() => {
-             move(bestmove.id, turn)
-           }, 400)
+            setTimeout(() => {
+                move(bestmove.id, turn)
+            }, 400)
         }
     }
 }
@@ -82,7 +82,7 @@ function tieChecker(board, callFromOutsideAI) {
             return false
         }
     }
-    if(temptie && callFromOutsideAI){
+    if (temptie && callFromOutsideAI) {
         setTimeout(() => {
             for (let index = 1; index < 10; index++) {
                 animateCSS(index, 'flash');
@@ -144,8 +144,8 @@ function move(buttonID, turnToCheck) {
         button.disabled = "true";
         document.getElementById(buttonID).textContent = turnToCheck
         grid[button.value] = turn;
-        let xdd = winChecker(grid, 'x', true)
-        let hola = tieChecker(grid, true)
+        winChecker(grid, 'x', true)
+        tieChecker(grid, true)
         //console.log(tie)
         turn = "o";
         remainingMovements--
@@ -155,8 +155,8 @@ function move(buttonID, turnToCheck) {
         button.disabled = "true";
         document.getElementById(buttonID).textContent = turnToCheck
         grid[button.value] = turn;
-        let xdd = winChecker(grid, 'o', true)
-        let hola = tieChecker(grid, true)
+        winChecker(grid, 'o', true)
+        tieChecker(grid, true)
         turn = "x";
         remainingMovements--
     }
